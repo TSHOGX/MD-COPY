@@ -12,17 +12,20 @@ if (!browser) {
   var browser = chrome;
 }
 
-browser.contextMenus.create({
-  id: REQUEST_TITLE,
-  title: "copy page",
-  contexts: ["page"],
-  // onclick: handleCopyRequest,
-});
-browser.contextMenus.create({
-  id: REQUEST_SELECTION,
-  title: "copy selection",
-  contexts: ["selection"],
-  // onclick: handleCopyRequest,
+// Remove all existing context menu items to avoid duplicate ID errors
+browser.contextMenus.removeAll(function() {
+  browser.contextMenus.create({
+    id: REQUEST_TITLE,
+    title: "copy page",
+    contexts: ["page"],
+    // onclick: handleCopyRequest,
+  });
+  browser.contextMenus.create({
+    id: REQUEST_SELECTION,
+    title: "copy selection",
+    contexts: ["selection"],
+    // onclick: handleCopyRequest,
+  });
 });
 
 // Add event listener for menu item clicks
@@ -37,3 +40,13 @@ function handleCopyRequest(info, tab) {
     useSelection: useSelection,
   });
 }
+
+// Add event listener for extension icon clicks
+browser.action.onClicked.addListener(function(tab) {
+  // When icon is clicked, copy the current page as markdown link
+  chrome.tabs.sendMessage(tab.id, {
+    tabUrl: tab.url,
+    tabTitle: tab.title,
+    useSelection: false,
+  });
+});

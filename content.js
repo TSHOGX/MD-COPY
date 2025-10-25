@@ -38,6 +38,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (selectionRange) {
     restoreSelection(selectionRange);
   }
+
+  // Show success feedback
+  showCopyFeedback();
 });
 
 function copyToClipboard(data) {
@@ -80,4 +83,44 @@ function restoreSelection(range) {
       sel.addRange(range);
     }
   }
+}
+
+function showCopyFeedback() {
+  // Create toast element
+  const toast = document.createElement("div");
+  toast.textContent = "✅ Copied!";
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  `;
+
+  document.body.appendChild(toast);
+
+  // Fade in
+  setTimeout(() => {
+    toast.style.opacity = "1";
+  }, 10);
+
+  // Fade out and remove
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => {
+      if (toast.parentNode) {
+        document.body.removeChild(toast);
+      }
+    }, 300);
+  }, 800);
 }

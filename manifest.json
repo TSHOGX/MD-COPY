@@ -22,5 +22,12 @@
     "48": "images/icon-48.png"
   },
 
+  "action": {
+    "default_icon": {
+      "48": "images/icon-48.png"
+    },
+    "default_title": "Copy Markdown Link"
+  },
+
   "permissions": ["activeTab", "contextMenus", "clipboardWrite"]
 }
